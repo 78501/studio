@@ -15,6 +15,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
   Form,
   FormControl,
   FormDescription,
@@ -26,7 +34,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useApp } from "@/hooks/use-app";
-import { Send, MapPin, Mic, Square, Paperclip, XCircle } from "lucide-react";
+import { Send, MapPin, Mic, Square, Paperclip, XCircle, Hospital } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import NearbyFacilities from "./nearby-facilities";
 import NearbyMedics from "./nearby-medics";
@@ -192,13 +200,26 @@ export default function UserView() {
                   </>
                 )}
               </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="w-full sm:w-auto">
+                    <Hospital className="mr-2 h-4 w-4" /> View Nearby Facilities
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="font-headline">Nearby Medical Facilities</DialogTitle>
+                    <DialogDescription>Hospitals and clinics in your vicinity.</DialogDescription>
+                  </DialogHeader>
+                  <NearbyFacilities />
+                </DialogContent>
+              </Dialog>
             </CardFooter>
           </form>
         </Form>
       </Card>
       
       <NearbyMedics />
-      <NearbyFacilities />
 
     </div>
   );

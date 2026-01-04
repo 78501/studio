@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Hospital, MapPin } from 'lucide-react';
 
@@ -33,32 +32,24 @@ const facilities = [
 
 export default function NearbyFacilities() {
   return (
-    <Card className="interactive-card">
-      <CardHeader>
-        <CardTitle className="font-headline">Nearby Medical Facilities</CardTitle>
-        <CardDescription>Hospitals and clinics in your vicinity.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ScrollArea className="h-64 pr-4">
-          <div className="space-y-4">
-            {facilities.map((facility) => (
-              <div key={facility.id} className="flex items-start gap-4 p-3 border rounded-md transition-colors hover:bg-muted/50">
-                <div className="flex-shrink-0 pt-1">
-                  <Hospital className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold">{facility.name}</p>
-                  <p className="text-sm text-muted-foreground">{facility.address}</p>
-                  <div className="flex items-center text-xs text-muted-foreground mt-1">
-                    <MapPin className="h-3 w-3 mr-1" />
-                    <span>{facility.distance} away</span>
-                  </div>
-                </div>
+    <ScrollArea className="h-64 pr-4">
+      <div className="space-y-4">
+        {facilities.map((facility) => (
+          <div key={facility.id} className="flex items-start gap-4 p-3 border rounded-md transition-colors hover:bg-muted/50">
+            <div className="flex-shrink-0 pt-1">
+              <Hospital className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="font-semibold">{facility.name}</p>
+              <p className="text-sm text-muted-foreground">{facility.address}</p>
+              <div className="flex items-center text-xs text-muted-foreground mt-1">
+                <MapPin className="h-3 w-3 mr-1" />
+                <span>{facility.distance} away</span>
               </div>
-            ))}
+            </div>
           </div>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+        ))}
+      </div>
+    </ScrollArea>
   );
 }
