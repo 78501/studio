@@ -27,7 +27,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useApp } from "@/hooks/use-app";
-import { Send, MapPin, Check, Clock, Mic, Square } from "lucide-react";
+import { Send, MapPin, Check, Clock, Mic, Square, Paperclip, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@/lib/types";
 import NearbyFacilities from "./nearby-facilities";
@@ -47,6 +47,7 @@ export default function UserView() {
   const { sendMessage, messages } = useApp();
   const { toast } = useToast();
   const [isRecording, setIsRecording] = useState(false);
+  const [hasRecording, setHasRecording] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,6 +65,7 @@ export default function UserView() {
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude
             } : undefined,
+            audio: hasRecording,
             status: 'sending'
         });
         toast({
@@ -71,6 +73,7 @@ export default function UserView() {
             description: "Your help request has been broadcasted to the network.",
         });
         form.reset();
+        setHasRecording(false);
     }
 
     if (values.shareLocation) {
@@ -89,8 +92,18 @@ export default function UserView() {
   }
 
   const handleRecording = () => {
-    setIsRecording(!isRecording);
+    if (isRecording) {
+        setIsRecording(false);
+        setHasRecording(true);
+    } else {
+        setIsRecording(true);
+        setHasRecording(false);
+    }
   };
+
+  const clearRecording = () => {
+      setHasRecording(false);
+  }
   
   const userMessages = messages.filter(msg => msg.senderId === 'local-user');
 
@@ -123,6 +136,17 @@ export default function UserView() {
                   </FormItem>
                 )}
               />
+              {hasRecording && (
+                <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/50">
+                    <div className="flex items-center gap-3">
+                        <Paperclip className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-sm font-medium text-muted-foreground">Voice message attached</span>
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={clearRecording} className="h-7 w-7">
+                        <XCircle className="h-5 w-5 text-muted-foreground hover:text-destructive" />
+                    </Button>
+                </div>
+              )}
               <FormField
                 control={form.control}
                 name="shareLocation"
@@ -198,6 +222,7 @@ export default function UserView() {
                         <div className="flex items-center text-xs text-muted-foreground mt-1">
                             <span>{formatDistanceToNow(new Date(msg.timestamp), { addSuffix: true })}</span>
                             {msg.location && <MapPin className="h-3 w-3 ml-2" />}
+                            {msg.audio && <Mic className="h-3 w-3 ml-2" />}
                         </div>
                     </div>
                 </li>

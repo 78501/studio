@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useApp } from '@/hooks/use-app';
 import type { UserRole } from '@/lib/types';
-import { MapPin, MessageSquare, ShieldAlert } from 'lucide-react';
+import { MapPin, MessageSquare, ShieldAlert, Mic } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface ResponderViewProps {
@@ -41,13 +41,21 @@ export default function ResponderView({ role }: ResponderViewProps) {
                   </CardHeader>
                   <CardContent>
                     <p className="text-base mb-3 pl-9">"{msg.content}"</p>
-                    {msg.location && (
-                        <div className="flex items-center gap-2 text-sm text-blue-600 pl-9">
-                            <MapPin className="h-4 w-4" />
-                            <span>Location data attached</span>
-                            <span className="text-muted-foreground text-xs font-mono">({msg.location.latitude.toFixed(4)}, {msg.location.longitude.toFixed(4)})</span>
-                        </div>
-                    )}
+                    <div className="flex items-center gap-4 text-sm pl-9">
+                        {msg.location && (
+                            <div className="flex items-center gap-2 text-blue-600">
+                                <MapPin className="h-4 w-4" />
+                                <span>Location attached</span>
+                                <span className="text-muted-foreground text-xs font-mono">({msg.location.latitude.toFixed(4)}, {msg.location.longitude.toFixed(4)})</span>
+                            </div>
+                        )}
+                         {msg.audio && (
+                            <div className="flex items-center gap-2 text-purple-600">
+                                <Mic className="h-4 w-4" />
+                                <span>Voice message attached</span>
+                            </div>
+                        )}
+                    </div>
                   </CardContent>
                 </Card>
               ))}

@@ -9,6 +9,7 @@ export interface Message {
     latitude: number;
     longitude: number;
   };
+  audio?: boolean; // Represents an attached voice recording
   status: 'sending' | 'sent';
 }
 

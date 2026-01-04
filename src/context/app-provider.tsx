@@ -80,9 +80,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setRole(null);
-    setMedics(prev => prev.filter(m => m.id !== 'local-medic'));
+     // Reset medics to the default mock data, removing the logged-in medic
+    const defaultMedics = MOCK_MEDICS.filter(m => m.id !== 'local-medic');
+    setMedics(defaultMedics);
     window.localStorage.removeItem('aidnet-role');
-    window.localStorage.setItem('aidnet-medics', JSON.stringify(MOCK_MEDICS));
+    window.localStorage.setItem('aidnet-medics', JSON.stringify(defaultMedics));
   }, []);
 
   const sendMessage = useCallback((messageContent: Omit<Message, 'id' | 'timestamp' | 'senderId'>) => {
