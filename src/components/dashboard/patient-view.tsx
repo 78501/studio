@@ -125,6 +125,26 @@ export default function PatientView() {
             <CardContent className="space-y-6">
               <FormField
                 control={form.control}
+                name="shareLocation"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Share Location</FormLabel>
+                      <FormDescription>
+                        Allow responders to see your current location for faster assistance.
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="content"
                 render={({ field }) => (
                   <FormItem>
@@ -151,26 +171,6 @@ export default function PatientView() {
                     </Button>
                 </div>
               )}
-              <FormField
-                control={form.control}
-                name="shareLocation"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Share Location</FormLabel>
-                      <FormDescription>
-                        Allow responders to see your current location for faster assistance.
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
             </CardContent>
             <CardFooter className="flex flex-wrap gap-2">
                <Button type="submit" className="w-full sm:w-auto flex-grow bg-accent hover:bg-accent/90 text-accent-foreground transition-transform hover:scale-105" disabled={form.formState.isSubmitting}>
