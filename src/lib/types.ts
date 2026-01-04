@@ -1,4 +1,4 @@
-export type UserRole = 'user' | 'medic' | 'hospital';
+export type UserRole = 'patient' | 'medic' | 'hospital';
 
 export interface Message {
   id: string;

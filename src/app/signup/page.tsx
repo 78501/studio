@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { Hospital, Stethoscope, User as UserIcon, HeartPulse } from "lucide-react";
+import { Hospital, Stethoscope, User as PatientIcon, HeartPulse } from "lucide-react";
 
 import { useApp } from "@/hooks/use-app";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 export default function SignupPage() {
   const { login, role } = useApp();
   const router = useRouter();
-  const [selectedRole, setSelectedRole] = useState<UserRole>("user");
+  const [selectedRole, setSelectedRole] = useState<UserRole>("patient");
   const [name, setName] = useState('');
 
   useEffect(() => {
@@ -38,10 +38,10 @@ export default function SignupPage() {
     icon: React.ElementType;
   }[] = [
     {
-      role: "user",
-      name: "User",
+      role: "patient",
+      name: "Patient",
       description: "Send help requests.",
-      icon: UserIcon,
+      icon: PatientIcon,
     },
     {
       role: "medic",
@@ -90,7 +90,7 @@ export default function SignupPage() {
             <div>
               <Label className="mb-3 block">Choose Your Role</Label>
               <RadioGroup
-                defaultValue="user"
+                defaultValue="patient"
                 className="grid grid-cols-3 gap-4"
                 value={selectedRole}
                 onValueChange={(value: UserRole) => setSelectedRole(value)}

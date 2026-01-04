@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/hooks/use-app';
 import { HeartPulse } from 'lucide-react';
-import UserView from '@/components/dashboard/user-view';
+import UserView from '@/components/dashboard/patient-view';
 import ResponderView from '@/components/dashboard/responder-view';
 
 export default function DashboardPage() {
@@ -35,7 +35,7 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto p-4 sm:p-6 md:p-8">
-      {role === 'user' ? (
+      {role === 'patient' ? (
         <UserView />
       ) : (
         <ResponderView role={role} />

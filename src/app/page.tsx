@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { Hospital, Stethoscope, User as UserIcon, HeartPulse } from "lucide-react";
+import { Hospital, Stethoscope, User as PatientIcon, HeartPulse } from "lucide-react";
 
 import { useApp } from "@/hooks/use-app";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,10 +49,10 @@ export default function RoleSelectionPage() {
     icon: React.ElementType;
   }[] = [
     {
-      role: "user",
-      name: "User",
+      role: "patient",
+      name: "Patient",
       description: "I need assistance.",
-      icon: UserIcon,
+      icon: PatientIcon,
     },
     {
       role: "medic",

@@ -92,7 +92,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       ...messageContent,
       id: new Date().toISOString() + Math.random(),
       timestamp: Date.now(),
-      senderId: 'local-user', // In a real app, this would be a unique device ID
+      senderId: 'local-patient', // In a real app, this would be a unique device ID
       status: 'sending',
     };
     
