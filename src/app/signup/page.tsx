@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { Hospital, Stethoscope, User as UserIcon, Wifi } from "lucide-react";
+import { Hospital, Stethoscope, User as UserIcon, HeartPulse } from "lucide-react";
 
 import { useApp } from "@/hooks/use-app";
 import { Button } from "@/components/ui/button";
@@ -65,9 +65,9 @@ export default function SignupPage() {
         <Card>
           <CardHeader className="text-center">
              <div className="flex items-center justify-center mb-2">
-                <Wifi className="h-12 w-12 text-primary" />
+                <HeartPulse className="h-12 w-12 text-primary" />
                 <h1 className="font-headline text-4xl font-bold text-primary ml-2">
-                MeshConnect
+                AidNet
                 </h1>
             </div>
             <CardTitle className="font-headline text-2xl">Create an Account</CardTitle>

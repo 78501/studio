@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { Bluetooth, LogOut, Wifi } from 'lucide-react';
+import { Bluetooth, LogOut, HeartPulse } from 'lucide-react';
 import { useApp } from '@/hooks/use-app';
 import { Button } from '@/components/ui/button';
 
@@ -20,9 +20,9 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-card shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 md:px-8">
         <div className="flex items-center gap-4">
-          <Wifi className="h-8 w-8 text-primary" />
+          <HeartPulse className="h-8 w-8 text-primary" />
           <h1 className="font-headline text-2xl font-bold text-primary hidden sm:block">
-            MeshConnect
+            AidNet
           </h1>
         </div>
         <div className="flex items-center gap-4">

@@ -28,17 +28,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const storedRole = window.localStorage.getItem('meshconnect-role') as UserRole | null;
-      const storedMessages = JSON.parse(window.localStorage.getItem('meshconnect-messages') || '[]');
+      const storedRole = window.localStorage.getItem('aidnet-role') as UserRole | null;
+      const storedMessages = JSON.parse(window.localStorage.getItem('aidnet-messages') || '[]');
       
       if (storedRole) {
         setRole(storedRole);
         if (storedRole !== 'medic') {
-            const storedMedics = JSON.parse(window.localStorage.getItem('meshconnect-medics') || JSON.stringify(MOCK_MEDICS));
+            const storedMedics = JSON.parse(window.localStorage.getItem('aidnet-medics') || JSON.stringify(MOCK_MEDICS));
             setMedics(storedMedics);
         }
       } else {
-        const storedMedics = JSON.parse(window.localStorage.getItem('meshconnect-medics') || JSON.stringify(MOCK_MEDICS));
+        const storedMedics = JSON.parse(window.localStorage.getItem('aidnet-medics') || JSON.stringify(MOCK_MEDICS));
         setMedics(storedMedics);
       }
       setMessages(storedMessages);
@@ -53,9 +53,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!loading) {
       try {
-        window.localStorage.setItem('meshconnect-role', role || '');
-        window.localStorage.setItem('meshconnect-messages', JSON.stringify(messages));
-        window.localStorage.setItem('meshconnect-medics', JSON.stringify(medics));
+        window.localStorage.setItem('aidnet-role', role || '');
+        window.localStorage.setItem('aidnet-messages', JSON.stringify(messages));
+        window.localStorage.setItem('aidnet-medics', JSON.stringify(medics));
       } catch (error) {
         console.error("Failed to write to localStorage", error);
       }
@@ -80,12 +80,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setRole(null);
-    setMedics(MOCK_MEDICS); // Reset medics to the initial mock data
-    // Clear relevant localStorage items
-    window.localStorage.removeItem('meshconnect-role');
-    // We keep messages for now, but could clear them too
-    // window.localStorage.removeItem('meshconnect-messages');
-    window.localStorage.setItem('meshconnect-medics', JSON.stringify(MOCK_MEDICS));
+    setMedics(prev => prev.filter(m => m.id !== 'local-medic'));
+    window.localStorage.removeItem('aidnet-role');
+    window.localStorage.setItem('aidnet-medics', JSON.stringify(MOCK_MEDICS));
   }, []);
 
   const sendMessage = useCallback((messageContent: Omit<Message, 'id' | 'timestamp' | 'senderId'>) => {

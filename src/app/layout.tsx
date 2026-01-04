@@ -4,7 +4,7 @@ import { AppProvider } from '@/context/app-provider';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'MeshConnect',
+  title: 'AidNet',
   description: 'Offline peer-to-peer help messaging',
 };
 
