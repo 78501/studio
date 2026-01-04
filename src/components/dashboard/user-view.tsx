@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { formatDistanceToNow } from 'date-fns';
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,11 +27,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useApp } from "@/hooks/use-app";
-import { Send, MapPin, Check, Clock } from "lucide-react";
+import { Send, MapPin, Check, Clock, Mic, Square } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@/lib/types";
 import NearbyFacilities from "./nearby-facilities";
 import NearbyMedics from "./nearby-medics";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   content: z.string().min(10, {
@@ -44,6 +46,7 @@ const formSchema = z.object({
 export default function UserView() {
   const { sendMessage, messages } = useApp();
   const { toast } = useToast();
+  const [isRecording, setIsRecording] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -84,6 +87,10 @@ export default function UserView() {
         handleSend();
     }
   }
+
+  const handleRecording = () => {
+    setIsRecording(!isRecording);
+  };
   
   const userMessages = messages.filter(msg => msg.senderId === 'local-user');
 
@@ -137,9 +144,33 @@ export default function UserView() {
                 )}
               />
             </CardContent>
-            <CardFooter>
-              <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={form.formState.isSubmitting}>
+            <CardFooter className="flex-col sm:flex-row gap-2">
+               <Button type="submit" className="w-full sm:w-auto flex-grow bg-accent hover:bg-accent/90 text-accent-foreground" disabled={form.formState.isSubmitting}>
                 <Send className="mr-2 h-4 w-4" /> Send Help Message
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className={cn(
+                  "w-full sm:w-auto relative",
+                  isRecording && "bg-red-500/20 text-red-500 border-red-500/50"
+                )}
+                onClick={handleRecording}
+              >
+                {isRecording ? (
+                  <>
+                    <span className="relative flex h-3 w-3 mr-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    Recording...
+                    <Square className="ml-2 h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    <Mic className="mr-2 h-4 w-4" /> Record Voice Message
+                  </>
+                )}
               </Button>
             </CardFooter>
           </form>
