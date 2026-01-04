@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import { Hospital, Stethoscope, User as UserIcon, HeartPulse } from "lucide-react";
@@ -13,6 +13,7 @@ import type { UserRole } from "@/lib/types";
 export default function RoleSelectionPage() {
   const { role, loading } = useApp();
   const router = useRouter();
+  const [isNavigating, setIsNavigating] = useState<UserRole | null>(null);
 
   useEffect(() => {
     if (!loading && role) {
@@ -20,7 +21,12 @@ export default function RoleSelectionPage() {
     }
   }, [role, loading, router]);
 
-  if (loading) {
+  const handleRoleSelect = (selectedRole: UserRole) => {
+    setIsNavigating(selectedRole);
+    router.push(`/login/${selectedRole}`);
+  };
+
+  if (loading || isNavigating) {
     return (
        <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
          <div className="flex flex-col items-center justify-center animate-pulse">
@@ -28,6 +34,7 @@ export default function RoleSelectionPage() {
             <h1 className="font-headline text-5xl font-bold text-primary ml-2 mt-4">
               AidNet
             </h1>
+            {isNavigating && <p className="mt-4 text-lg text-muted-foreground">Loading Login...</p>}
          </div>
       </main>
     );
@@ -80,16 +87,16 @@ export default function RoleSelectionPage() {
           <CardContent className="space-y-6">
              <div className="grid grid-cols-3 gap-4">
                 {roles.map(({ role, name, icon: Icon }) => (
-                  <Link key={role} href={`/login/${role}`} passHref>
-                    <div
-                      className={cn(
-                        "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer h-full"
-                      )}
-                    >
-                      <Icon className="mb-3 h-6 w-6" />
-                      <span className="text-center text-sm font-medium">{name}</span>
-                    </div>
-                  </Link>
+                  <div
+                    key={role}
+                    onClick={() => handleRoleSelect(role)}
+                    className={cn(
+                      "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer h-full"
+                    )}
+                  >
+                    <Icon className="mb-3 h-6 w-6" />
+                    <span className="text-center text-sm font-medium">{name}</span>
+                  </div>
                 ))}
               </div>
             
