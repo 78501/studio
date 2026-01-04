@@ -3,16 +3,15 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
+import { Hospital, Stethoscope, User as UserIcon, Wifi } from "lucide-react";
 
 import { useApp } from "@/hooks/use-app";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wifi } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { UserRole } from "@/lib/types";
 
-export default function LoginPage() {
-  const { login, role } = useApp();
+export default function RoleSelectionPage() {
+  const { role } = useApp();
   const router = useRouter();
 
   useEffect(() => {
@@ -21,14 +20,33 @@ export default function LoginPage() {
     }
   }, [role, router]);
 
-  const handleLogin = () => {
-    // This is a mock login. In a real app, you'd validate credentials.
-    // For now, we'll log in as a 'user' by default.
-    login('user'); 
-    router.push("/dashboard");
-  };
+  const roles: {
+    role: UserRole;
+    name: string;
+    description: string;
+    icon: React.ElementType;
+  }[] = [
+    {
+      role: "user",
+      name: "User",
+      description: "I need assistance.",
+      icon: UserIcon,
+    },
+    {
+      role: "medic",
+      name: "Medic",
+      description: "I am a first responder.",
+      icon: Stethoscope,
+    },
+    {
+      role: "hospital",
+      name: "Hospital",
+      description: "I am a command center.",
+      icon: Hospital,
+    },
+  ];
 
-  if (role) return null; // Or a loader
+  if (role) return null;
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
@@ -41,23 +59,27 @@ export default function LoginPage() {
                 MeshConnect
                 </h1>
             </div>
-            <CardTitle className="font-headline text-2xl">Welcome Back</CardTitle>
+            <CardTitle className="font-headline text-2xl">Select Your Role</CardTitle>
             <CardDescription>
-              Log in to access the emergency network.
+              Choose how you are connecting to the network.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required />
-            </div>
-            <Button onClick={handleLogin} className="w-full">
-              Login
-            </Button>
+          <CardContent className="space-y-6">
+             <div className="grid grid-cols-3 gap-4">
+                {roles.map(({ role, name, icon: Icon }) => (
+                  <Link key={role} href={`/login/${role}`} passHref>
+                    <div
+                      className={cn(
+                        "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer h-full"
+                      )}
+                    >
+                      <Icon className="mb-3 h-6 w-6" />
+                      <span className="text-center text-sm font-medium">{name}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            
             <div className="mt-4 text-center text-sm">
               Don't have an account?{' '}
               <Link href="/signup" className="underline">
