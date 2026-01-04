@@ -18,6 +18,7 @@ export default function SignupPage() {
   const { login, role } = useApp();
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState<UserRole>("user");
+  const [name, setName] = useState('');
 
   useEffect(() => {
     if (role) {
@@ -26,7 +27,7 @@ export default function SignupPage() {
   }, [role, router]);
 
   const handleSignup = () => {
-    login(selectedRole);
+    login(selectedRole, name);
     router.push("/dashboard");
   };
 
@@ -73,6 +74,10 @@ export default function SignupPage() {
             <CardDescription>Join the network to send or receive alerts.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input id="name" type="text" placeholder="Jane Doe" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="m@example.com" required />

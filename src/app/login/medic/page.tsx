@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
 
@@ -14,6 +14,7 @@ import { Stethoscope } from "lucide-react";
 export default function MedicLoginPage() {
   const { login, role } = useApp();
   const router = useRouter();
+  const [name, setName] = useState('');
 
   useEffect(() => {
     if (role) {
@@ -22,7 +23,7 @@ export default function MedicLoginPage() {
   }, [role, router]);
 
   const handleLogin = () => {
-    login('medic'); 
+    login('medic', name || 'Alex Riley (You)'); 
     router.push("/dashboard");
   };
 
@@ -42,6 +43,10 @@ export default function MedicLoginPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" type="text" placeholder="Alex Riley" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="medic@example.com" required />

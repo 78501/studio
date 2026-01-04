@@ -8,7 +8,7 @@ interface AppContextType {
   messages: Message[];
   medics: Medic[];
   loading: boolean;
-  login: (role: UserRole) => void;
+  login: (role: UserRole, name?: string) => void;
   logout: () => void;
   sendMessage: (message: Omit<Message, 'id' | 'timestamp' | 'senderId'>) => void;
 }
@@ -20,14 +20,6 @@ const MOCK_MEDICS: Medic[] = [
     { id: 'medic-2', name: 'John Davis', specialty: 'EMT', distance: '1.2 miles' },
 ];
 
-// This represents the medic who is currently logging in.
-const LOCAL_MEDIC: Medic = {
-  id: 'local-medic',
-  name: 'Alex Riley (You)',
-  specialty: 'Field Medic',
-  distance: '0.1 miles',
-};
-
 export function AppProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<UserRole | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -38,13 +30,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       const storedRole = window.localStorage.getItem('meshconnect-role') as UserRole | null;
       const storedMessages = JSON.parse(window.localStorage.getItem('meshconnect-messages') || '[]');
+      const storedMedics = JSON.parse(window.localStorage.getItem('meshconnect-medics') || JSON.stringify(MOCK_MEDICS));
+      
       if (storedRole) {
         setRole(storedRole);
-        if (storedRole === 'medic') {
-          setMedics(prev => [LOCAL_MEDIC, ...prev]);
-        }
       }
       setMessages(storedMessages);
+      setMedics(storedMedics);
+
     } catch (error) {
       console.error("Failed to read from localStorage", error);
     } finally {
@@ -57,18 +50,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
       try {
         window.localStorage.setItem('meshconnect-role', role || '');
         window.localStorage.setItem('meshconnect-messages', JSON.stringify(messages));
+        window.localStorage.setItem('meshconnect-medics', JSON.stringify(medics));
       } catch (error) {
         console.error("Failed to write to localStorage", error);
       }
     }
-  }, [role, messages, loading]);
+  }, [role, messages, medics, loading]);
 
-  const login = useCallback((selectedRole: UserRole) => {
+  const login = useCallback((selectedRole: UserRole, name?: string) => {
     if (selectedRole === 'medic') {
-        // Add the logged-in medic to the list if not already present
+        const localMedic: Medic = {
+          id: 'local-medic',
+          name: name || 'Anonymous Medic',
+          specialty: 'Field Medic',
+          distance: '0.1 miles',
+        };
         setMedics(prev => {
-            if (prev.find(m => m.id === LOCAL_MEDIC.id)) return prev;
-            return [LOCAL_MEDIC, ...prev];
+            if (prev.find(m => m.id === localMedic.id)) return prev;
+            return [localMedic, ...MOCK_MEDICS];
         });
     }
     setRole(selectedRole);
@@ -76,8 +75,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     if (role === 'medic') {
-        // Remove the logged-in medic from the list
-        setMedics(prev => prev.filter(m => m.id !== LOCAL_MEDIC.id));
+        setMedics(prev => prev.filter(m => m.id !== 'local-medic'));
     }
     setRole(null);
   }, [role]);
