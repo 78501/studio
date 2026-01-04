@@ -30,6 +30,7 @@ import { Send, MapPin, Check, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@/lib/types";
 import NearbyFacilities from "./nearby-facilities";
+import NearbyMedics from "./nearby-medics";
 
 const formSchema = z.object({
   content: z.string().min(10, {
@@ -145,6 +146,7 @@ export default function UserView() {
         </Form>
       </Card>
       
+      <NearbyMedics />
       <NearbyFacilities />
 
       <Card>

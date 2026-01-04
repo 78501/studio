@@ -11,3 +11,10 @@ export interface Message {
   };
   status: 'sending' | 'sent';
 }
+
+export interface Medic {
+  id: string;
+  name: string;
+  specialty: string;
+  distance: string;
+}

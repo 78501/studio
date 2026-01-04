@@ -1,11 +1,12 @@
 "use client";
 
 import React, { createContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import type { UserRole, Message } from '@/lib/types';
+import type { UserRole, Message, Medic } from '@/lib/types';
 
 interface AppContextType {
   role: UserRole | null;
   messages: Message[];
+  medics: Medic[];
   loading: boolean;
   login: (role: UserRole) => void;
   logout: () => void;
@@ -14,9 +15,23 @@ interface AppContextType {
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
+const MOCK_MEDICS: Medic[] = [
+    { id: 'medic-1', name: 'Dr. Emily Carter', specialty: 'Paramedic', distance: '0.8 miles' },
+    { id: 'medic-2', name: 'John Davis', specialty: 'EMT', distance: '1.2 miles' },
+];
+
+// This represents the medic who is currently logging in.
+const LOCAL_MEDIC: Medic = {
+  id: 'local-medic',
+  name: 'Alex Riley (You)',
+  specialty: 'Field Medic',
+  distance: '0.1 miles',
+};
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<UserRole | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [medics, setMedics] = useState<Medic[]>(MOCK_MEDICS);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,6 +40,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const storedMessages = JSON.parse(window.localStorage.getItem('meshconnect-messages') || '[]');
       if (storedRole) {
         setRole(storedRole);
+        if (storedRole === 'medic') {
+          setMedics(prev => [LOCAL_MEDIC, ...prev]);
+        }
       }
       setMessages(storedMessages);
     } catch (error) {
@@ -46,14 +64,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [role, messages, loading]);
 
   const login = useCallback((selectedRole: UserRole) => {
+    if (selectedRole === 'medic') {
+        // Add the logged-in medic to the list if not already present
+        setMedics(prev => {
+            if (prev.find(m => m.id === LOCAL_MEDIC.id)) return prev;
+            return [LOCAL_MEDIC, ...prev];
+        });
+    }
     setRole(selectedRole);
   }, []);
 
   const logout = useCallback(() => {
+    if (role === 'medic') {
+        // Remove the logged-in medic from the list
+        setMedics(prev => prev.filter(m => m.id !== LOCAL_MEDIC.id));
+    }
     setRole(null);
-    // Optionally clear messages on logout, or keep them for persistence
-    // setMessages([]); 
-  }, []);
+  }, [role]);
 
   const sendMessage = useCallback((messageContent: Omit<Message, 'id' | 'timestamp' | 'senderId'>) => {
     const newMessage: Message = {
@@ -72,7 +99,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }, 1500);
   }, []);
 
-  const value = { role, messages, loading, login, logout, sendMessage };
+  const value = { role, messages, medics, loading, login, logout, sendMessage };
 
   return (
     <AppContext.Provider value={value}>
