@@ -34,7 +34,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useApp } from "@/hooks/use-app";
-import { Send, MapPin, Mic, Square, Paperclip, XCircle, Hospital } from "lucide-react";
+import { Send, MapPin, Mic, Square, Paperclip, XCircle, Hospital, Stethoscope } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import NearbyFacilities from "./nearby-facilities";
 import NearbyMedics from "./nearby-medics";
@@ -172,7 +172,7 @@ export default function UserView() {
                 )}
               />
             </CardContent>
-            <CardFooter className="flex-col sm:flex-row gap-2">
+            <CardFooter className="flex flex-wrap gap-2">
                <Button type="submit" className="w-full sm:w-auto flex-grow bg-accent hover:bg-accent/90 text-accent-foreground transition-transform hover:scale-105" disabled={form.formState.isSubmitting}>
                 <Send className="mr-2 h-4 w-4" /> Send Help Message
               </Button>
@@ -200,9 +200,20 @@ export default function UserView() {
                   </>
                 )}
               </Button>
-              <Dialog>
+            </CardFooter>
+          </form>
+        </Form>
+      </Card>
+      
+      <Card className="interactive-card">
+        <CardHeader>
+            <CardTitle className="font-headline">Network Resources</CardTitle>
+            <CardDescription>View available resources on the local network.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid sm:grid-cols-2 gap-4">
+            <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="w-full sm:w-auto">
+                  <Button variant="outline" className="w-full">
                     <Hospital className="mr-2 h-4 w-4" /> View Nearby Facilities
                   </Button>
                 </DialogTrigger>
@@ -214,12 +225,22 @@ export default function UserView() {
                   <NearbyFacilities />
                 </DialogContent>
               </Dialog>
-            </CardFooter>
-          </form>
-        </Form>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="w-full">
+                    <Stethoscope className="mr-2 h-4 w-4" /> View Nearby Medics
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="font-headline">Nearby Medical Experts</DialogTitle>
+                    <DialogDescription>Available first responders in your area.</DialogDescription>
+                  </DialogHeader>
+                  <NearbyMedics />
+                </DialogContent>
+              </Dialog>
+        </CardContent>
       </Card>
-      
-      <NearbyMedics />
 
     </div>
   );
