@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { formatDistanceToNow } from 'date-fns';
 import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -27,9 +26,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useApp } from "@/hooks/use-app";
-import { Send, MapPin, Check, Clock, Mic, Square, Paperclip, XCircle } from "lucide-react";
+import { Send, MapPin, Mic, Square, Paperclip, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import type { Message } from "@/lib/types";
 import NearbyFacilities from "./nearby-facilities";
 import NearbyMedics from "./nearby-medics";
 import { cn } from "@/lib/utils";
@@ -44,7 +42,7 @@ const formSchema = z.object({
 });
 
 export default function UserView() {
-  const { sendMessage, messages } = useApp();
+  const { sendMessage } = useApp();
   const { toast } = useToast();
   const [isRecording, setIsRecording] = useState(false);
   const [hasRecording, setHasRecording] = useState(false);
@@ -104,8 +102,6 @@ export default function UserView() {
   const clearRecording = () => {
       setHasRecording(false);
   }
-  
-  const userMessages = messages.filter(msg => msg.senderId === 'local-user');
 
   return (
     <div className="space-y-8">
@@ -204,35 +200,6 @@ export default function UserView() {
       <NearbyMedics />
       <NearbyFacilities />
 
-      <Card className="interactive-card">
-        <CardHeader>
-          <CardTitle className="font-headline">Sent Messages</CardTitle>
-          <CardDescription>A log of your recent help requests.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {userMessages.length > 0 ? (
-            <ul className="space-y-4">
-              {userMessages.map((msg) => (
-                <li key={msg.id} className="flex items-start space-x-4 p-3 border rounded-md">
-                    <div className="flex-shrink-0">
-                        {msg.status === 'sending' ? <Clock className="h-5 w-5 text-muted-foreground animate-spin" /> : <Check className="h-5 w-5 text-green-500" />}
-                    </div>
-                    <div className="flex-1">
-                        <p className="text-sm">{msg.content}</p>
-                        <div className="flex items-center text-xs text-muted-foreground mt-1">
-                            <span>{formatDistanceToNow(new Date(msg.timestamp), { addSuffix: true })}</span>
-                            {msg.location && <MapPin className="h-3 w-3 ml-2" />}
-                            {msg.audio && <Mic className="h-3 w-3 ml-2" />}
-                        </div>
-                    </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-center text-muted-foreground py-8">You haven't sent any messages yet.</p>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }
