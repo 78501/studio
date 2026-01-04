@@ -9,7 +9,7 @@ export default function NearbyMedics() {
     const { medics } = useApp();
 
   return (
-    <Card>
+    <Card className="interactive-card">
       <CardHeader>
         <CardTitle className="font-headline">Nearby Medical Experts</CardTitle>
         <CardDescription>Available first responders in your area.</CardDescription>
@@ -18,7 +18,7 @@ export default function NearbyMedics() {
         <ScrollArea className="h-64 pr-4">
           <div className="space-y-4">
             {medics.map((medic) => (
-              <div key={medic.id} className="flex items-start gap-4 p-3 border rounded-md">
+              <div key={medic.id} className="flex items-start gap-4 p-3 border rounded-md transition-colors hover:bg-muted/50">
                 <div className="flex-shrink-0 pt-1">
                   <UserCircle className="h-5 w-5 text-primary" />
                 </div>

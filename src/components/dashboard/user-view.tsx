@@ -109,7 +109,7 @@ export default function UserView() {
 
   return (
     <div className="space-y-8">
-      <Card>
+      <Card className="interactive-card">
         <CardHeader>
           <CardTitle className="font-headline">Emergency Broadcast</CardTitle>
           <CardDescription>
@@ -137,7 +137,7 @@ export default function UserView() {
                 )}
               />
               {hasRecording && (
-                <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/50">
+                <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/50 animate-fade-in">
                     <div className="flex items-center gap-3">
                         <Paperclip className="h-5 w-5 text-muted-foreground" />
                         <span className="text-sm font-medium text-muted-foreground">Voice message attached</span>
@@ -169,14 +169,14 @@ export default function UserView() {
               />
             </CardContent>
             <CardFooter className="flex-col sm:flex-row gap-2">
-               <Button type="submit" className="w-full sm:w-auto flex-grow bg-accent hover:bg-accent/90 text-accent-foreground" disabled={form.formState.isSubmitting}>
+               <Button type="submit" className="w-full sm:w-auto flex-grow bg-accent hover:bg-accent/90 text-accent-foreground transition-transform hover:scale-105" disabled={form.formState.isSubmitting}>
                 <Send className="mr-2 h-4 w-4" /> Send Help Message
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 className={cn(
-                  "w-full sm:w-auto relative",
+                  "w-full sm:w-auto relative transition-all",
                   isRecording && "bg-red-500/20 text-red-500 border-red-500/50"
                 )}
                 onClick={handleRecording}
@@ -204,7 +204,7 @@ export default function UserView() {
       <NearbyMedics />
       <NearbyFacilities />
 
-      <Card>
+      <Card className="interactive-card">
         <CardHeader>
           <CardTitle className="font-headline">Sent Messages</CardTitle>
           <CardDescription>A log of your recent help requests.</CardDescription>

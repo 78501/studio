@@ -33,7 +33,7 @@ const facilities = [
 
 export default function NearbyFacilities() {
   return (
-    <Card>
+    <Card className="interactive-card">
       <CardHeader>
         <CardTitle className="font-headline">Nearby Medical Facilities</CardTitle>
         <CardDescription>Hospitals and clinics in your vicinity.</CardDescription>
@@ -42,7 +42,7 @@ export default function NearbyFacilities() {
         <ScrollArea className="h-64 pr-4">
           <div className="space-y-4">
             {facilities.map((facility) => (
-              <div key={facility.id} className="flex items-start gap-4 p-3 border rounded-md">
+              <div key={facility.id} className="flex items-start gap-4 p-3 border rounded-md transition-colors hover:bg-muted/50">
                 <div className="flex-shrink-0 pt-1">
                   <Hospital className="h-5 w-5 text-primary" />
                 </div>

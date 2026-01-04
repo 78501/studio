@@ -71,7 +71,7 @@ export default function RoleSelectionPage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
       <div className="w-full max-w-md">
-        <Card>
+        <Card className="animate-fade-in-up">
           <CardHeader className="text-center">
             <div className="flex items-center justify-center mb-2">
                 <HeartPulse className="h-12 w-12 text-primary" />
@@ -91,7 +91,7 @@ export default function RoleSelectionPage() {
                     key={role}
                     onClick={() => handleRoleSelect(role)}
                     className={cn(
-                      "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer h-full"
+                      "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer h-full transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg hover:border-primary"
                     )}
                   >
                     <Icon className="mb-3 h-6 w-6" />
