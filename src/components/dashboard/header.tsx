@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Bluetooth, LogOut, HeartPulse } from 'lucide-react';
 import { useApp } from '@/hooks/use-app';
@@ -8,13 +9,27 @@ import { Button } from '@/components/ui/button';
 export default function Header() {
   const { logout, role } = useApp();
   const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = () => {
+    setIsLoggingOut(true);
     logout();
     router.push('/');
   };
 
   const roleName = role ? role.charAt(0).toUpperCase() + role.slice(1) : '';
+
+  if (isLoggingOut) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen animate-pulse">
+        <HeartPulse className="h-20 w-20 text-primary" />
+        <h1 className="font-headline text-5xl font-bold text-primary ml-2 mt-4">
+          AidNet
+        </h1>
+        <p className="mt-4 text-lg text-muted-foreground">Disconnecting from Network...</p>
+      </div>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card shadow-sm">
