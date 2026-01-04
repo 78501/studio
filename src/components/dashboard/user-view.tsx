@@ -29,6 +29,7 @@ import { useApp } from "@/hooks/use-app";
 import { Send, MapPin, Check, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@/lib/types";
+import NearbyFacilities from "./nearby-facilities";
 
 const formSchema = z.object({
   content: z.string().min(10, {
@@ -144,6 +145,8 @@ export default function UserView() {
         </Form>
       </Card>
       
+      <NearbyFacilities />
+
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">Sent Messages</CardTitle>
