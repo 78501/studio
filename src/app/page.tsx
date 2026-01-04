@@ -11,14 +11,29 @@ import { cn } from "@/lib/utils";
 import type { UserRole } from "@/lib/types";
 
 export default function RoleSelectionPage() {
-  const { role } = useApp();
+  const { role, loading } = useApp();
   const router = useRouter();
 
   useEffect(() => {
-    if (role) {
+    if (!loading && role) {
       router.push("/dashboard");
     }
-  }, [role, router]);
+  }, [role, loading, router]);
+
+  if (loading) {
+    return (
+       <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
+         <div className="flex flex-col items-center justify-center animate-pulse">
+            <HeartPulse className="h-20 w-20 text-primary" />
+            <h1 className="font-headline text-5xl font-bold text-primary ml-2 mt-4">
+              AidNet
+            </h1>
+         </div>
+      </main>
+    );
+  }
+
+  if (role) return null;
 
   const roles: {
     role: UserRole;
@@ -45,8 +60,6 @@ export default function RoleSelectionPage() {
       icon: Hospital,
     },
   ];
-
-  if (role) return null;
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/hooks/use-app';
-import { LoaderCircle } from 'lucide-react';
+import { HeartPulse } from 'lucide-react';
 import UserView from '@/components/dashboard/user-view';
 import ResponderView from '@/components/dashboard/responder-view';
 
@@ -19,9 +19,12 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <LoaderCircle className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-4 text-lg text-muted-foreground">Initializing Network...</p>
+      <div className="flex flex-col items-center justify-center h-full animate-pulse">
+        <HeartPulse className="h-20 w-20 text-primary" />
+        <h1 className="font-headline text-5xl font-bold text-primary ml-2 mt-4">
+          AidNet
+        </h1>
+        <p className="mt-4 text-lg text-muted-foreground">Initializing Network...</p>
       </div>
     );
   }
