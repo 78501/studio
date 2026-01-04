@@ -30,13 +30,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       const storedRole = window.localStorage.getItem('meshconnect-role') as UserRole | null;
       const storedMessages = JSON.parse(window.localStorage.getItem('meshconnect-messages') || '[]');
-      const storedMedics = JSON.parse(window.localStorage.getItem('meshconnect-medics') || JSON.stringify(MOCK_MEDICS));
       
       if (storedRole) {
         setRole(storedRole);
+        if (storedRole !== 'medic') {
+            const storedMedics = JSON.parse(window.localStorage.getItem('meshconnect-medics') || JSON.stringify(MOCK_MEDICS));
+            setMedics(storedMedics);
+        }
+      } else {
+        const storedMedics = JSON.parse(window.localStorage.getItem('meshconnect-medics') || JSON.stringify(MOCK_MEDICS));
+        setMedics(storedMedics);
       }
       setMessages(storedMessages);
-      setMedics(storedMedics);
 
     } catch (error) {
       console.error("Failed to read from localStorage", error);
@@ -58,6 +63,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [role, messages, medics, loading]);
 
   const login = useCallback((selectedRole: UserRole, name?: string) => {
+    setRole(selectedRole);
     if (selectedRole === 'medic') {
         const localMedic: Medic = {
           id: 'local-medic',
@@ -66,19 +72,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
           distance: '0.1 miles',
         };
         setMedics(prev => {
-            if (prev.find(m => m.id === localMedic.id)) return prev;
-            return [localMedic, ...MOCK_MEDICS];
+            const otherMedics = prev.filter(m => m.id !== 'local-medic');
+            return [localMedic, ...otherMedics];
         });
     }
-    setRole(selectedRole);
   }, []);
 
   const logout = useCallback(() => {
-    if (role === 'medic') {
-        setMedics(prev => prev.filter(m => m.id !== 'local-medic'));
-    }
     setRole(null);
-  }, [role]);
+    setMedics(MOCK_MEDICS); // Reset medics to the initial mock data
+    // Clear relevant localStorage items
+    window.localStorage.removeItem('meshconnect-role');
+    // We keep messages for now, but could clear them too
+    // window.localStorage.removeItem('meshconnect-messages');
+    window.localStorage.setItem('meshconnect-medics', JSON.stringify(MOCK_MEDICS));
+  }, []);
 
   const sendMessage = useCallback((messageContent: Omit<Message, 'id' | 'timestamp' | 'senderId'>) => {
     const newMessage: Message = {
